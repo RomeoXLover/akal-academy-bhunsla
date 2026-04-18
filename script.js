@@ -3,8 +3,9 @@ const REMEMBER_KEY = "akal_academy_bhunsla_remember";
 const TODAY = new Date().toISOString().split("T")[0];
 
 // ── Cloud Sync Config ─────────────────────────────────────────────────────────
-const API_BASE = "https://akal-academy-bhunsla.vercel.app";
+const API_BASE = "https://akal-academy-bhunsla-eight.vercel.app";
 // ─────────────────────────────────────────────────────────────────────────────
+
 
 
 let appState = null;
