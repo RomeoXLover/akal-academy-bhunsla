@@ -1,0 +1,50 @@
+{
+  "name": "akal-academy-bhunsla",
+  "version": "1.0.0",
+  "description": "Official App for Akal Academy Bhunsla",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:exe": "electron-builder build --win --publish never",
+    "cap:init": "cap init \"Akal Academy Bhunsla\" com.akalacademy.bhunsla --web-dir www",
+    "cap:add": "cap add android",
+    "cap:copy": "cap copy",
+    "cap:open": "cap open android"
+  },
+  "keywords": [
+    "education",
+    "school",
+    "akal-academy"
+  ],
+  "author": "Antigravity",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3",
+    "@capacitor/cli": "^6.0.0"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  },
+  "capacitor": {
+    "appName": "Akal Academy Bhunsla",
+    "webDir": "www",
+    "bundledWebRuntime": false
+  },
+  "build": {
+    "appId": "com.akalacademy.bhunsla",
+    "productName": "Akal Academy Bhunsla",
+    "win": {
+      "target": "nsis",
+      "icon": "www/image.png"
+    },
+    "files": [
+      "www/**/*",
+      "main.js"
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  }
+}

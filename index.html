@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akal Academy Bhunsla | School Portal</title>
+    <meta name="description" content="School management portal for Akal Academy Bhunsla.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<script>
+    // Register Service Worker for real OS notifications
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(function(){});
+    }
+</script>
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-orbit orbit-one"></div>
+        <div class="splash-orbit orbit-two"></div>
+        <div class="splash-content">
+            <img src="image.png" alt="Akal Academy Bhunsla logo" class="splash-logo">
+            <p class="eyebrow">Akal Academy Bhunsla</p>
+            <h1 id="brand-line">Learning, leadership and school management in one place.</h1>
+            <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+        </div>
+    </div>
+
+    <div class="app-shell">
+        <section id="login-page" class="login-page">
+            <div class="login-panel">
+                <div>
+                    <div class="login-brand">
+                        <img src="image.png" alt="School logo" class="login-logo">
+                        <div>
+                            <p class="eyebrow">Official School Portal</p>
+                            <h2 id="login-title">Akal Academy Bhunsla</h2>
+                            <p class="login-copy" id="login-copy">Use your school account to access tests, results, homework, timetable, profile, settings and management tools.</p>
+                        </div>
+                    </div>
+
+                    <form id="login-form" class="login-form">
+                        <div class="field">
+                            <label for="username">Username</label>
+                            <input id="username" type="text" placeholder="Enter username" autocomplete="username" required>
+                        </div>
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" required>
+                        </div>
+                        <div class="field-row">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Remember me for 31 days</label>
+                        </div>
+                        <p id="login-error" class="form-error hidden">Incorrect username or password.</p>
+                        <button type="submit" id="login-btn" class="primary-btn">Sign In</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="login-hero">
+                <div class="hero-card">
+                    <span class="hero-badge">Role Based Access</span>
+                    <h3>Operator, Principal, Teacher and Student dashboards with permission-based controls.</h3>
+                    <div class="hero-grid">
+                        <article><strong>Tests & Homework</strong><p>Create class-wise work, set marks, pass marks and dates, then view pending and completed records.</p></article>
+                        <article><strong>Search Info</strong><p>Find teacher names, subjects, class assignments and contact details quickly.</p></article>
+                        <article><strong>Editable Syllabus</strong><p>Operator and Principal can maintain subject content using rich-text style tools.</p></article>
+                        <article><strong>Support & Settings</strong><p>Language preference, support phone and email are available inside the app.</p></article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portal-page" class="portal-page hidden">
+            <aside class="sidebar">
+                <div class="sidebar-brand">
+                    <img src="image.png" alt="School logo">
+                    <div>
+                        <strong>Akal Academy Bhunsla</strong>
+                        <span id="sidebar-role">Role</span>
+                    </div>
+                </div>
+
+                <nav class="nav-list">
+                    <button class="nav-item active" data-view="overview">Overview</button>
+                    <button class="nav-item" data-view="tests">Tests</button>
+                    <button id="tests-result-nav" class="nav-item hidden" data-view="tests-result-classes">Tests Result</button>
+                    <button id="exam-results-nav" class="nav-item hidden" data-view="exam-result-classes">Exam Results</button>
+                    <button id="results-nav" class="nav-item hidden" data-view="results">My Results</button>
+                    <button class="nav-item" data-view="homework">Homework</button>
+                    <button id="students-nav" class="nav-item hidden" data-view="students">Students</button>
+                    <button class="nav-item" data-view="search">Search Info</button>
+                    <button class="nav-item" data-view="syllabus">Syllabus</button>
+                    <button class="nav-item" data-view="timetable">Timetable</button>
+                    <button class="nav-item" data-view="profile">Profile</button>
+                    <button class="nav-item" data-view="settings">Settings</button>
+                    <button id="major-nav" class="nav-item hidden" data-view="major">Major Access</button>
+                </nav>
+
+                <button id="logout-btn" class="ghost-btn">Sign Out</button>
+            </aside>
+
+            <main class="portal-main">
+                <header class="topbar">
+                    <div>
+                        <p class="eyebrow">School Management Portal</p>
+                        <h1 id="page-title">Overview</h1>
+                    </div>
+                    <div class="topbar-right">
+                        <div class="notif-wrap">
+                            <button id="notif-bell" class="notif-bell-btn" onclick="toggleNotifPanel()" title="Notifications">
+                                🔔
+                                <span id="notif-badge" class="notif-badge hidden">0</span>
+                            </button>
+                            <div id="notif-panel" class="notif-panel hidden">
+                                <div class="notif-panel-head">
+                                    <strong>Notifications</strong>
+                                    <button class="ghost-btn small-btn" onclick="markAllNotifRead()">Mark all read</button>
+                                </div>
+                                <div id="notif-list" class="notif-list"></div>
+                            </div>
+                        </div>
+                        <div class="topbar-user">
+                            <strong id="user-name">User</strong>
+                            <span id="user-role">Role</span>
+                        </div>
+                    </div>
+                </header>
+
+                <section id="view-overview" class="view-section">
+                    <div class="overview-hero">
+                        <div>
+                            <p class="eyebrow">Dashboard Snapshot</p>
+                            <h2 id="overview-welcome">Welcome</h2>
+                            <p id="overview-subtext">School overview, access summary and current academic activity.</p>
+                        </div>
+                        <div class="overview-support">
+                            <strong>Support</strong>
+                            <span>8708534348</span>
+                            <span>romeo4india@gmail.com</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-grid">
+                        <article class="summary-card"><span>Total Members</span><strong id="metric-total-users">0</strong></article>
+                        <article class="summary-card"><span>Teachers</span><strong id="metric-total-teachers">0</strong></article>
+                        <article class="summary-card"><span>Students</span><strong id="metric-total-students">0</strong></article>
+                        <article class="summary-card"><span>Live Tests</span><strong id="metric-live-tests">0</strong></article>
+                    </div>
+
+                    <div class="three-col">
+                        <article class="panel">
+                            <div class="panel-head"><h3>Role Access</h3></div>
+                            <div id="access-summary" class="tag-grid"></div>
+                        </article>
+                        <article class="panel">
+                            <div class="panel-head"><h3>Pending Work</h3></div>
+                            <div id="overview-pending" class="card-list"></div>
+                        </article>
+                        <article class="panel">
+                            <div class="panel-head"><h3>Recent Activity</h3></div>
+                            <div id="overview-activity" class="card-list"></div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="view-tests" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Tests</h3>
+                            <div class="panel-actions">
+                                <div id="test-mode-tabs" class="chip-row">
+                                    <button class="chip-btn active" type="button" data-test-mode="pending">Pending</button>
+                                    <button class="chip-btn" type="button" data-test-mode="completed">Completed</button>
+                                </div>
+                                <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--ink-soft)">📅 <input id="test-date-filter" class="text-input" type="date" style="min-width:130px"></label>
+                                <button id="new-test-btn" class="primary-btn small-btn hidden">Create Test</button>
+                            </div>
+                        </div>
+                        <div id="tests-board" class="card-list"></div>
+                        <div class="archive-block">
+                            <div class="panel-head"><h4>Archive by Date</h4></div>
+                            <div id="tests-archive" class="card-list"></div>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="view-tests-result-classes" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head"><h3>Select Class to View Tests</h3></div>
+                        <div id="test-result-classes-grid" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-tests-result-list" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3 id="test-result-class-title">Tests</h3>
+                            <button class="ghost-btn small-btn" onclick="showView('tests-result-classes')">Back to Classes</button>
+                        </div>
+                        <div id="tests-result-cards" class="card-list"></div>
+                    </article>
+                </section>
+
+                <section id="view-test-manage" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <div>
+                                <p class="eyebrow">Test Details</p>
+                                <h3 id="test-manage-title">Select Student to Grade</h3>
+                            </div>
+                            <button id="back-to-test-results" class="ghost-btn small-btn">Back to Tests</button>
+                        </div>
+                        <div id="test-manage-summary" class="summary-grid"></div>
+                        <div class="panel-head panel-row">
+                            <h4>Students List</h4>
+                            <input id="test-student-search" class="text-input" type="text" placeholder="Search student name, roll">
+                        </div>
+                        <div id="test-student-list" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-exam-result-classes" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head"><h3>Select Class for Exam Results</h3></div>
+                        <div id="exam-result-classes-grid" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-exam-result-students" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3 id="exam-result-class-title">Students</h3>
+                            <button class="ghost-btn small-btn" onclick="showView('exam-result-classes')">Back to Classes</button>
+                        </div>
+                        <div id="exam-result-students-grid" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-results" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3 id="exam-student-title">Exam Results</h3>
+                            <div class="panel-actions">
+                                <div id="term-tabs" class="chip-row"></div>
+                                <select id="results-mode" class="select-input narrow-select">
+                                    <option value="bar">Bar Graph</option>
+                                    <option value="pie">Pie Chart</option>
+                                    <option value="table">Table Only</option>
+                                </select>
+                                <button id="new-result-btn" class="primary-btn small-btn hidden">Create Result</button>
+                                <button id="back-to-exam-students" class="ghost-btn small-btn hidden">Back</button>
+                            </div>
+                        </div>
+                        <div class="summary-grid results-summary-grid">
+                            <article class="summary-card"><span>Overall Percentage</span><strong id="overall-percentage">0%</strong></article>
+                            <article class="summary-card"><span>Total Subjects</span><strong id="overall-subject-count">0</strong></article>
+                        </div>
+                        <div class="results-stage">
+                            <div id="results-chart" class="chart-card"></div>
+                            <div class="table-wrap">
+                                <table>
+                                    <thead><tr><th>Subject</th><th>Obtained</th><th>Maximum</th><th>Result</th></tr></thead>
+                                    <tbody id="results-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="view-homework" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Homework</h3>
+                            <div class="panel-actions">
+                                <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--ink-soft)">📅 <input id="homework-date-filter" class="text-input" type="date" style="min-width:130px"></label>
+                                <button id="new-homework-btn" class="primary-btn small-btn hidden">Create Homework</button>
+                            </div>
+                        </div>
+                        <div id="homework-board" class="card-list"></div>
+                        <div class="archive-block">
+                            <div class="panel-head"><h4>Archive by Date</h4></div>
+                            <div id="homework-archive" class="card-list"></div>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="view-search" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Search Teacher Info</h3>
+                            <input id="search-input" class="text-input" type="text" placeholder="Search by teacher name, subject or class">
+                        </div>
+                        <div id="search-results" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-syllabus" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Subject Syllabus</h3>
+                            <button id="new-syllabus-btn" class="primary-btn small-btn hidden">Add Topic</button>
+                        </div>
+                        <div id="syllabus-list" class="syllabus-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-timetable" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Timetable</h3>
+                            <div id="timetable-actions" class="panel-actions hidden">
+                                <button id="toggle-edit-mode-btn" class="ghost-btn small-btn">Edit Mode</button>
+                                <button id="rename-timetable-btn" class="ghost-btn small-btn">Rename Header</button>
+                                <button id="add-day-btn" class="ghost-btn small-btn">Add Column</button>
+                                <button id="add-period-btn" class="ghost-btn small-btn">Add Row</button>
+                                <button id="save-timetable-btn" class="primary-btn small-btn">Save Timetable</button>
+                            </div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead id="timetable-head"></thead>
+                                <tbody id="timetable-body"></tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+
+                <section id="view-students" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Students</h3>
+                            <input id="student-search" class="text-input" type="text" placeholder="Search by name, class, roll or admission">
+                        </div>
+                        <div id="students-list" class="teacher-grid"></div>
+                    </article>
+                </section>
+
+                <section id="view-profile" class="view-section hidden">
+                    <article class="panel profile-panel">
+                        <div class="profile-hero">
+                            <div class="avatar-ring" id="profile-avatar">A</div>
+                            <div>
+                                <p class="eyebrow">Profile</p>
+                                <h3 id="profile-heading">Member Profile</h3>
+                                <p id="profile-subheading">Keep contact and class details updated.</p>
+                            </div>
+                        </div>
+                        <form id="profile-form" class="profile-grid">
+                            <div class="field"><label for="profile-name">Name</label><input id="profile-name" type="text" readonly></div>
+                            <div class="field"><label for="profile-role">Role</label><input id="profile-role" type="text" readonly></div>
+                            <div class="field"><label for="profile-roll">Roll Number</label><input id="profile-roll" type="text" readonly></div>
+                            <div class="field"><label for="profile-admission">Admission Number</label><input id="profile-admission" type="text" readonly></div>
+                            <div class="field"><label for="profile-class">Class</label><input id="profile-class" type="text"></div>
+                            <div class="field"><label for="profile-blood">Blood Group</label><input id="profile-blood" type="text"></div>
+                            <div class="field"><label for="profile-phone">Phone Number</label><input id="profile-phone" type="text"></div>
+                            <div class="field"><label for="profile-email">Email</label><input id="profile-email" type="email"></div>
+                            <div class="field"><label for="profile-guardian">Guardian</label><input id="profile-guardian" type="text"></div>
+                            <div class="field"><label for="profile-address">Address</label><input id="profile-address" type="text"></div>
+                            <button type="submit" class="primary-btn profile-save">Save Profile</button>
+                        </form>
+                    </article>
+                </section>
+
+                <section id="view-settings" class="view-section hidden">
+                    <div class="two-col">
+                        <article class="panel">
+                            <div class="panel-head"><h3>Language Settings</h3></div>
+                            <div class="field">
+                                <label for="language-select">Portal Language</label>
+                                <select id="language-select" class="select-input">
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="pa">Punjabi</option>
+                                </select>
+                            </div>
+                            <p class="panel-hint">This updates the portal language preference for this device.</p>
+                        </article>
+                        <article class="panel">
+                            <div class="panel-head"><h3>Support</h3></div>
+                            <div class="detail-stack">
+                                <article class="detail-item"><strong>Phone</strong><span>8708534348</span></article>
+                                <article class="detail-item"><strong>Email</strong><span>romeo4india@gmail.com</span></article>
+                                <article class="detail-item"><strong>Help</strong><span>Use this for portal support, login help and app issues.</span></article>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="view-major" class="view-section hidden">
+                    <article class="panel">
+                        <div class="panel-head panel-row">
+                            <h3>Major Access</h3>
+                            <div class="panel-actions">
+                                <input id="major-search" class="text-input" type="text" placeholder="Search users">
+                                <button id="new-user-btn" class="primary-btn small-btn">Add User</button>
+                            </div>
+                        </div>
+                        <p id="major-hint" class="panel-hint"></p>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th>Name</th><th>Role</th><th>Class / Subject</th><th>Contact</th><th>Access</th></tr></thead>
+                                <tbody id="major-body"></tbody>
+                            </table>
+                        </div>
+                    </article>
+                </section>
+            </main>
+        </section>
+    </div>
+
+    <div id="toast-root" class="toast-root"></div>
+    <datalist id="subject-options"></datalist>
+
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3 id="modal-title">User Record</h3></div>
+            <form id="user-form" class="profile-grid">
+                <input id="modal-id" type="hidden">
+                <div class="field"><label for="modal-name">Name</label><input id="modal-name" type="text" required></div>
+                <div class="field">
+                    <label for="modal-role">Role</label>
+                    <select id="modal-role" class="select-input">
+                        <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Principal">Principal</option>
+                        <option value="Operator">Operator</option>
+                        <option value="Major">Major</option>
+                    </select>
+                </div>
+                <div class="field"><label for="modal-username">Username</label><input id="modal-username" type="text" required></div>
+                <div class="field"><label for="modal-password">Password</label><input id="modal-password" type="text" required></div>
+                <div class="field"><label for="modal-roll">Roll Number</label><input id="modal-roll" type="text"></div>
+                <div class="field"><label for="modal-admission">Admission Number</label><input id="modal-admission" type="text"></div>
+                <div class="field"><label for="modal-class">Class</label><input id="modal-class" type="text"></div>
+                <div class="field"><label for="modal-subject">Subject</label><input id="modal-subject" type="text"></div>
+                <div class="field"><label for="modal-blood">Blood Group</label><input id="modal-blood" type="text"></div>
+                <div class="field"><label for="modal-phone">Phone Number</label><input id="modal-phone" type="text"></div>
+                <div class="field"><label for="modal-email">Email</label><input id="modal-email" type="email"></div>
+                <div class="field"><label for="modal-status">Status</label><input id="modal-status" type="text"></div>
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn small-btn">Save</button>
+                    <button type="button" id="close-modal-btn" class="ghost-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="task-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3 id="task-modal-title">Create Item</h3></div>
+            <form id="task-form" class="profile-grid">
+                <input id="task-id" type="hidden">
+                <input id="task-kind" type="hidden">
+                <div class="field"><label for="task-title">Title</label><input id="task-title" type="text" required></div>
+                <div class="field"><label for="task-subject">Subject</label><input id="task-subject" type="text" required></div>
+                <div class="field"><label for="task-class">Class</label><input id="task-class" type="text" required></div>
+                <div class="field"><label for="task-date">Date</label><input id="task-date" type="date" required></div>
+                <div id="homework-expiry-wrap" class="field hidden">
+                    <label for="task-expire-days">Auto remove after (days)</label>
+                    <input id="task-expire-days" type="number" min="1" max="365" placeholder="1">
+                </div>
+                <div id="task-marks-wrap" class="field full-span" style="display:flex;gap:1rem;">
+                    <div class="field" style="flex:1"><label for="task-max">Max Marks</label><input id="task-max" type="number"></div>
+                    <div class="field" style="flex:1"><label for="task-min">Min Marks</label><input id="task-min" type="number"></div>
+                    <div class="field" style="flex:1"><label for="task-pass">Pass Marks</label><input id="task-pass" type="number"></div>
+                </div>
+                <div class="field full-span"><label for="task-desc">Description</label><textarea id="task-desc" class="text-area-input"></textarea></div>
+                <div class="modal-actions">
+                    <button id="task-save-btn" type="submit" class="primary-btn small-btn">Save</button>
+                    <button type="button" id="close-task-btn" class="ghost-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="syllabus-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3 id="syllabus-modal-title">Edit Syllabus</h3></div>
+            <form id="syllabus-form">
+                <input id="syllabus-id" type="hidden">
+                <div class="profile-grid">
+                    <div class="field"><label for="syllabus-subject">Subject</label><input id="syllabus-subject" type="text" required></div>
+                    <div class="field"><label for="syllabus-class">Class</label><input id="syllabus-class" type="text" required></div>
+                    <div class="field">
+                        <label for="syllabus-type">Type</label>
+                        <select id="syllabus-type" class="select-input">
+                            <option value="text">Text</option>
+                            <option value="file">File Upload</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="syllabus-editor-wrap">
+                    <div class="editor-toolbar">
+                    <button type="button" class="tool-btn" data-tool="bold">B</button>
+                    <button type="button" class="tool-btn" data-tool="italic">I</button>
+                    <button type="button" class="tool-btn" data-tool="underline">U</button>
+                    <button type="button" class="tool-btn" data-tool="insertUnorderedList">List</button>
+                    </div>
+                    <div id="syllabus-editor" class="rich-editor" contenteditable="true"></div>
+                </div>
+                <div id="syllabus-file-wrap" class="hidden">
+                    <div class="field">
+                        <label for="syllabus-file">Choose File (Upload)</label>
+                        <input id="syllabus-file" type="file" class="text-input">
+                    </div>
+                    <p id="current-file-name" class="panel-hint"></p>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn small-btn">Save</button>
+                    <button type="button" id="close-syllabus-btn" class="ghost-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="result-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3>Create / Edit Exam Result</h3></div>
+            <form id="result-form" class="profile-grid">
+                <input id="result-id" type="hidden">
+                <div class="field">
+                    <label for="result-student-search">Search Student</label>
+                    <input id="result-student-search" type="text" list="student-preview-list" placeholder="Type student name">
+                    <datalist id="student-preview-list"></datalist>
+                </div>
+                <div class="field"><label for="result-student">Student</label><select id="result-student" class="select-input"></select></div>
+                <div class="field"><label for="result-class">Class</label><input id="result-class" type="text" readonly></div>
+                <div class="field"><label for="result-roll">Roll</label><input id="result-roll" type="text" readonly></div>
+                <div class="field full-span"><label for="result-term">Term</label><select id="result-term" class="select-input"></select></div>
+                <div class="full-span" style="border-top:1px solid rgba(16,33,59,0.1); padding-top:1rem; margin-top:0.5rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                        <strong>Subjects</strong>
+                        <button type="button" class="ghost-btn small-btn" onclick="addResultSubjectRow()">+ Add Subject</button>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 80px 80px 80px 80px 44px; gap:0.5rem; margin-bottom:0.5rem; padding:0 0.25rem;">
+                        <small style="color:var(--ink-soft); font-weight:700; text-transform:uppercase; font-size:0.72rem;">SUBJECT</small>
+                        <small style="color:var(--ink-soft); font-weight:700; text-transform:uppercase; font-size:0.72rem;">SCORE</small>
+                        <small style="color:var(--ink-soft); font-weight:700; text-transform:uppercase; font-size:0.72rem;">MAX</small>
+                        <small style="color:var(--ink-soft); font-weight:700; text-transform:uppercase; font-size:0.72rem;">INT.</small>
+                        <small style="color:var(--ink-soft); font-weight:700; text-transform:uppercase; font-size:0.72rem;">INT.MAX</small>
+                        <span></span>
+                    </div>
+                    <div id="result-subject-rows"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn small-btn">Save Result</button>
+                    <button type="button" id="close-result-btn" class="ghost-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="syllabus-viewer" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3 id="syllabus-viewer-title">Syllabus Viewer</h3></div>
+            <div id="syllabus-viewer-body" class="viewer-body"></div>
+            <div class="modal-actions">
+                <a id="syllabus-download-link" class="primary-btn small-btn hidden" download>Download</a>
+                <button type="button" id="close-viewer-btn" class="ghost-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="student-viewer" class="modal-backdrop hidden">
+        <div class="modal-card" style="max-width: 900px; width: 95%;">
+            <div class="panel-head"><h3 id="student-viewer-title">Student Detail</h3></div>
+            <div class="two-col">
+                <article class="panel">
+                    <div class="panel-head"><h4>Test / Result</h4></div>
+                    <div id="student-tests-box" class="card-list" style="max-height: 400px; overflow-y: auto;"></div>
+                </article>
+                <article class="panel">
+                    <div class="panel-head"><h4>Exam / Result</h4></div>
+                    <div id="student-exams-box" class="card-list" style="max-height: 400px; overflow-y: auto;"></div>
+                </article>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="close-student-viewer-btn" class="ghost-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="test-student-marks-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+            <div class="panel-head"><h3 id="test-student-marks-title">Marking Modal</h3></div>
+            <form id="test-student-marks-form" class="profile-grid">
+                <input id="tsm-test-id" type="hidden">
+                <input id="tsm-student-id" type="hidden">
+                <div class="field"><label>Student Name</label><input id="tsm-student-name" type="text" readonly></div>
+                <div class="field"><label>Marks Achieved</label><input id="tsm-marks" type="number"></div>
+                <div class="modal-actions">
+                    <button type="submit" class="primary-btn small-btn">Save</button>
+                    <button type="button" id="tsm-absent-btn" class="ghost-btn small-btn">Set as Absent</button>
+                    <button type="button" id="tsm-delete-btn" class="delete-btn small-btn">Delete</button>
+                    <button type="button" onclick="closeTestStudentMarksModal()" class="ghost-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
