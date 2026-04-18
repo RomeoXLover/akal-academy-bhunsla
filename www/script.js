@@ -3,12 +3,9 @@ const REMEMBER_KEY = "akal_academy_bhunsla_remember";
 const TODAY = new Date().toISOString().split("T")[0];
 
 // ── Cloud Sync Config ─────────────────────────────────────────────────────────
-// After deploying to Vercel, replace this with your actual Vercel URL:
-// e.g. "https://akal-academy-bhunsla.vercel.app"
-const API_BASE = window.location.hostname === "localhost" || window.location.protocol === "file:"
-    ? "" // use relative path in dev/APK
-    : ""; // leave empty = same origin (Vercel hosts both app and API)
+const API_BASE = "https://akal-academy-bhunsla.vercel.app";
 // ─────────────────────────────────────────────────────────────────────────────
+
 
 let appState = null;
 let currentUser = null;
