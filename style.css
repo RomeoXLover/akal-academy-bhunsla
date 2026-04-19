@@ -303,6 +303,9 @@ th { color: var(--ink-soft); font-size: 0.8rem; text-transform: uppercase; lette
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
+    /* Scale entire UI down — shrinks all rem values proportionally */
+    html { font-size: 13px; }
+
     /* Portal layout: full width */
     .portal-page { grid-template-columns: 1fr; height: auto; }
 
